@@ -1,55 +1,57 @@
-out_to_x no
-own_window no
-out_to_console yes
-background no
-max_text_width 0
-
-
-# Update interval in seconds
-update_interval 2.0
-
-# This is the number of times Conky will update before quitting.
-# Set to zero to run forever.
-total_run_times 0
-
-# Shortens units to a single character (kiB->k, GiB->G, etc.). Default is off.
+own_window yes
+own_window_class Conky
+own_window_colour black
+own_window_transparent no
+own_window_argb_visual yes
+own_window_argb_value 140
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+own_window_type desktop
+double_buffer yes
+use_spacer right 
+use_xft yes
+#font snap-7
+xftfont Hyperspace:bold:size=7
+# xftfont DejaVu Sans Light:size=8
+xftalpha 1
+text_buffer_size 2048 
+# alignment is disabled when own_window_type is dock
+alignment top_left
+gap_x 0 
+gap_y 0 # Use this to move your bar up and down the screen
+default_bar_size 20 6
 short_units yes
 
-# How strict should if_up be when testing an interface for being up?
-# The value is one of up, link or address, to check for the interface
-# being solely up, being up and having link or being up, having link
-# and an assigned IP address. 
-if_up_strictness address
+# --- Colours, Sizes, Fonts & Margins --- #
+update_interval 1.0
+stippled_borders 0
+minimum_size 1920 6 # Your screen width here
+maximum_width 1910  # and here
+border_width 2
+default_color d3d3d3
+# --- Text --- #
+draw_outline no
+draw_borders no
+#font -*-profont-*-*-*-11-*-*-*-*-*-*-* 
+uppercase yes
+draw_shades no 
 
-# Add spaces to keep things from moving about?  This only affects certain objects.
-# use_spacer should have an argument of left, right, or none
-use_spacer left
-
-# Force UTF8? note that UTF8 suppor  t required XFT
-override_utf8_locale no
-
-# number of cpu samples to average 
-# set to 1 to disable averaging
-cpu_avg_samples 2
-
-
-# Stuff after 'TEXT' will be formatted on screenv
+color0 a6e22e # Light green
+color1 beed5f # Lime
+color2 fd971f # Light Orange
+color3 ff669d # Pink
+color4 9e6ffe # Purple
+color5 00CBEE # Blue
+color6 6EC6D4 # Light grey
 TEXT
-
-# JSON for i3bar
-#   { "full_text" : "", "color" : "\#cccccc"},
-
-# [
-# { "full_text" : "Open support tickets: ${exec ticket-count}" , "color" : ${if_match ${exec ticket-count}<10}"\#008000"${else}"\#ff0000"${endif} },
- [{ "full_text" : "Load AVG: $loadavg" , "color" : "\#cccccc" },
- { "full_text" : "CPU ${execpi 2 ~/bin/cpu.sh }" , "color" : "\#33FF99" },
- { "full_text" : "LAN IP: ${exec /sbin/ifconfig em1|grep inet|grep -v inet6|awk '{print $2}'}" , "color" : "\#cccccc" },
-# { "full_text" : "WLAN IP: ${exec /sbin/ifconfig wlp0s20u2u2|grep inet|grep -v inet6|awk '{print $2}'}" , "color" : "\#cccccc" },
- { "full_text" : "RAM: ${memperc}% used" , "color" : ${if_match ${memperc}<90}"\#cccccc"${else}"\#ff0000"${endif} },
-# { "full_text" : "♫: $moc_title", "color" : "\#6666FF"},
-# { "full_text" : "♫ MPD: $mpd_artist - $mpd_title", "color" : "\#6666FF"},
-# { "full_text" : "Vol: ${execpi 2 pactl list sinks|grep -v Base|grep Volume:|cut -d/ -f2|sed '1d'}", "color" : "\#3366FF"},
- { "full_text" : "Unread Email: ${execpi 5 cat /tmp/.mailcount}", "color" : "\#3366FF"},
-# { "full_text" : "${execpi 1 ping 8.8.8.8 -c 1|grep ttl|awk '{print $7}'}", "color" : "\#3366FF"},
- { "full_text" : "${time %D %R}", "color" : "\#00ffff"}],
-
+${color1}Machine${color} $nodename  |  \
+${color2}Uptime ${color} $uptime ${color}| \
+${color3}Kernel${color} $kernel  |  \
+${color4}Cpu: ${color}${cpubar} ${cpu}%  |  \
+${color5}Ram: ${color}${membar 6, 20} ${color6}${mem}${color 00CBEE}/${color}${memmax}  |  \
+${color fff}Home: ${color}${font}${fs_bar 6,60 /home} ${color6}${fs_used /home}/${color}${fs_size /home}  |   \
+${color fff}Root: ${color}${font}${fs_bar 6,60 /} ${color6}${fs_used /}/${color}${fs_size /}  |   \
+${color0}Down: ${color}${downspeed eno1}  |  \
+${color D45959}Up: ${color}${color}${upspeed eno1}  |  \
+${color6}IP: ${color}${execi 3600 curl -s http://ipecho.net/plain} ${color6}(${addr eno1})${color} \
+${if_mpd_playing} | ${color 4} MPD: ${color}${mpd_bar}  ${mpd_artist} - ${mpd_title}${endif}  \
+${alignr}${execi 1 date}
